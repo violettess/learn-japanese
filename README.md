@@ -1,1 +1,1 @@
-# learn-katakana
+# learn-hiragana
