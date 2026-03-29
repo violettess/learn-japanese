@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katakana Writer AI</title>
+
+    <script src="https://unpkg.com/paper"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/write.css') }}">
+    
+</head>
+
+<body>
+    <nav class="top-nav">
+        <div class="nav-logo">
+            Logo <span>Learn Japanese</span>
+        </div>
+        <div class="nav-controls">
+            <button class="btn-nav" onclick="undo()">↩ Undo</button>
+            <button class="btn-nav" onclick="redo()">↪ Redo</button>
+            <button class="btn-nav" onclick="clearCanvas()">✕ Clear</button>
+        </div>
+    </nav>
+
+    <div class="page-wrapper">
+        <div class="main-card">
+            <div class="canvas-panel">
+                <div>
+                    <div class="panel-label">Drawing Canvas</div>
+                    <div class="panel-title">Draw Your Katakana</div>
+                </div>
+                <div class="canvas-wrapper">
+                    <canvas id="drawingCanvas" resize></canvas>
+                </div>
+            </div>
+
+            <div class="prediction-panel">
+                <div class="char-display">
+                    <div id="kanaChar" class="kana-char placeholder">?</div>
+                </div>
+
+                <div class="prediction-info">
+                    <div class="prediction-badge">
+                        <div class="dot"></div>
+                        AI Prediction
+                    </div>
+
+                    <div id="predictionName" class="prediction-name placeholder">
+                        Draw a character to begin
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="info-row" id="readingRow" style="display:none">
+                        <div class="info-label">How to Read</div>
+                        <div class="info-value" id="readingValue">—</div>
+                    </div>
+
+                    <div class="info-row" id="pronunciationRow" style="display:none">
+                        <div class="info-label">Pronunciation</div>
+                        <div class="info-value" id="pronunciationValue">—</div>
+                    </div>
+
+                    <div class="info-row" id="descRow" style="display:none">
+                        <div class="info-label">Description</div>
+                        <div class="info-value" id="descValue">—</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cat">
+        <dotlottie-wc
+    src="https://lottie.host/7684a5b6-4097-4cba-8f4a-13f9cfa0827d/5Rt2nM9sNW.lottie"
+    style="width: 35vw;height: 35vw"
+    autoplay
+    loop
+    ></dotlottie-wc>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/write.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+    src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js"
+    type="module"
+    ></script>
+</body>
+</html>
