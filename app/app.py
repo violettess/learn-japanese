@@ -9,13 +9,15 @@ from PIL import Image, ImageOps
 app = Flask(__name__)
  
 base_dir = os.path.dirname(os.path.abspath(__file__))
-model_path = os.path.join(base_dir, 'model', 'linear_svm_v3_calibrated.pkl')
- 
-model = joblib.load(model_path)
+knn_path = os.path.join(base_dir, 'model', 'pca_knn.pkl')
+pca_path = os.path.join(base_dir, 'model', 'pca_knn_pca.pkl')
+
+knn = joblib.load(knn_path)
+pca = joblib.load(pca_path)
  
 KANA_LABELS = {
     0:  "A (あ)",    1:  "I (い)",    2:  "U (う)",    3:  "E (え)",    4:  "O (お)",
-    5:  "KA (か)",   6:  "KI (き)",   7:  "KU (く)",   8:  "KE (け)",   9:  "KO (こ)",
+    5:  "KA (か)",   6:  "KI (き)",   7:  "KU (く)",   8:  "KE (け)",   9:  "KO (コ)",
     10: "SA (さ)",   11: "SHI (し)",  12: "SU (す)",   13: "SE (せ)",   14: "SO (そ)",
     15: "TA (た)",   16: "CHI (ち)",  17: "TSU (つ)",  18: "TE (て)",   19: "TO (と)",
     20: "NA (な)",   21: "NI (に)",   22: "NU (ぬ)",   23: "NE (ね)",   24: "NO (の)",
@@ -55,17 +57,18 @@ def predict():
     img.save("debug_3_cropped.png")
  
     img = ImageOps.expand(img, border=20, fill=0)
-    img = img.resize((36, 36))
+    img = img.resize((28, 28))
     img.save("debug_4_final.png")
  
-    img_array = np.array(img).flatten().reshape(1, -1) / 255.0
+    img_array = np.array(img).flatten().reshape(1, 784).astype('float32') / 255.0
     print(f"Min: {img_array.min():.3f}, Max: {img_array.max():.3f}, Non-zero: {np.count_nonzero(img_array)}")
  
-    prediction_index = int(model.predict(img_array)[0])
+    img_pca = pca.transform(img_array)         
+    prediction_index = int(knn.predict(img_pca)[0])
     label = KANA_LABELS.get(prediction_index, f"Unknown ({prediction_index})")
     print(f"Predicted index: {prediction_index} → {label}")
  
     return jsonify({"result": label})
  
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=7860, debug=False)
